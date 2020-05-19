@@ -39,8 +39,7 @@ const transactionSchema = new mongoose.Schema({
   },
   amountToBePaid: {
     // TODO: How this is calculated
-    type: Date,
-    default: Date.now(),
+    type: Number
   },
 });
 
