@@ -32,11 +32,12 @@ const transactionSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide the activity line'],
   },
-  description: {
-    type: String,
-    required: [true, 'Please provide a short description about the payload'],
-  },
   paymentRequisitionDate: {
+    // TODO: How this is calculated
+    type: Date,
+    default: Date.now(),
+  },
+  amountToBePaid: {
     // TODO: How this is calculated
     type: Date,
     default: Date.now(),
