@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   photo: String,
   role: {
     type: String,
-    enum: ["user", "admin", "superadmin"],
+    enum: ["user", "manager", "accounts", "finance"],
     default: "user",
   },
   password: {
@@ -36,25 +36,6 @@ const userSchema = new mongoose.Schema({
       msg: "Passwords do not match",
     },
   },
-  bookings: [{ type: mongoose.Schema.ObjectId, ref: "Hotel" }],
-  favourites: [{ type: mongoose.Schema.ObjectId, ref: "Hotel" }],
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
-  accountActivated: {
-    type: Boolean,
-    default: false,
-  },
-  passwordChangedAt: {
-    type: Date,
-    select: false,
-  }, // Created only when a user changes password
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  confirmAccountToken: String,
-  confirmAccountExpires: Date,
 });
 
 // This function runs everytime a new document is created or saved in the database
@@ -83,35 +64,6 @@ userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
-
-// userSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path: "transactions",
-//     select: "-__v"
-//   });
-//   next();
-// });
-
-// Embed transaction documents into the User document
-// userSchema.pre("save", async function() {
-//   const transactionPromises = this.transactions.map(
-//     async id => await Transaction.findById(id)
-//   );
-//   this.transactions = await Promise.all(transactionPromises);
-// });
-
-// userSchema.pre(/^find/, async function(next) {
-//   const transactions = await Transaction.find();
-//   console.log(transactions);
-//   this.transactions = transactions;
-//   next();
-// });
-
-// userSchema.virtual("transactions", {
-//   ref: "Transaction",
-//   foreignField: "sender/_id",
-//   localField: "_id"
-// });
 
 // Instance method for all user documents
 userSchema.methods.correctPassword = async function (

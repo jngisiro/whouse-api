@@ -1,11 +1,11 @@
 import express from 'express';
 
 import {
-  createBooking,
-  getAllBookings,
-  getBooking,
-  updateBooking,
-  deleteBooking,
+  createTransaction,
+  getAllTransactions,
+  getTransaction,
+  updateTransaction,
+  deleteTransaction,
 } from '../controllers/transaction.controller';
 
 import { protect, restrictTo } from '../controllers/auth.controller';
@@ -13,14 +13,18 @@ import { protect, restrictTo } from '../controllers/auth.controller';
 const router = express.Router({ mergeParams: true });
 
 router
-  .route('/bookings')
-  .post(getAllBookings, restrictTo('user', 'admin'), getAllBookings)
-  .post(protect, restrictTo('user'), createBooking);
+  .route('/')
+  .get(
+    protect,
+    restrictTo('user', 'manager', 'accounts', 'finance', 'admin'),
+    getAllTransactions
+  )
+  .post(protect, restrictTo('user'), createTransaction);
 
 router
-  .route('/:booking-id')
-  .post(protect, restrictTo('admin'), getBooking)
-  .patch(protect, restrictTo('admin'), updateBooking)
-  .delete(protect, restrictTo('admin'), deleteBooking);
+  .route('/:transaction-id')
+  .post(protect, restrictTo('admin'), getTransaction)
+  .patch(protect, restrictTo('admin'), updateTransaction)
+  .delete(protect, restrictTo('admin'), deleteTransaction);
 
 export default router;
