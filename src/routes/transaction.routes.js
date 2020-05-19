@@ -22,7 +22,7 @@ router
   .post(protect, restrictTo('user'), createTransaction);
 
 router
-  .route('/:transaction-id')
+  .route('/:id')
   .get(protect, getTransaction)
   .patch(protect, restrictTo('admin'), updateTransaction)
   .delete(protect, restrictTo('admin'), deleteTransaction);
