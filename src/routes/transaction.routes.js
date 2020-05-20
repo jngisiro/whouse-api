@@ -10,7 +10,11 @@ import {
 
 import { protect, restrictTo } from '../controllers/auth.controller';
 
+import commentRouter from './comment.routes';
+
 const router = express.Router({ mergeParams: true });
+
+router.use('/:id/comments', commentRouter);
 
 router
   .route('/')

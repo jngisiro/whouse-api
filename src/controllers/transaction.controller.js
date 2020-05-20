@@ -20,7 +20,9 @@ export const getAllTransactions = catchAsync(async (req, res) => {
 });
 
 export const getTransaction = catchAsync(async (req, res) => {
-  const transaction = await Transactions.findById(req.params.id);
+  const transaction = await Transactions.findById(req.params.id).populate(
+    'comments'
+  );
 
   res.status(200).json({
     status: 'success',
