@@ -50,6 +50,17 @@ const transactionSchema = new mongoose.Schema(
       // TODO: How this is calculated
       type: Number,
     },
+
+    rejected: {
+      type: Boolean,
+      default: false,
+    },
+
+    step: {
+      type: String,
+      enum: ['draft', 'submitted', 'finance', 'accounts', 'manager'],
+      default: 'submitted',
+    },
   },
   {
     toJSON: { virtuals: true },

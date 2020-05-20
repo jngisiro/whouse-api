@@ -28,7 +28,7 @@ router
 router
   .route('/:id')
   .get(protect, getTransaction)
-  .patch(protect, restrictTo('admin'), updateTransaction)
+  .patch(protect, updateTransaction)
   .delete(protect, restrictTo('admin'), deleteTransaction);
 
 export default router;
