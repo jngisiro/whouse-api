@@ -36,7 +36,7 @@ router.patch('/updateMe', controller.updateMe);
 router.delete('/deleteMe', controller.deleteMe);
 
 // Restrict the routes below to only the admin
-router.use(authController.restrictTo('superadmin'));
+router.use(authController.restrictTo('admin'));
 
 // Admin specific routes for getting users, updating user information and deleting user accounts
 router.route('/').get(controller.getAllUsers).post(controller.createUser);

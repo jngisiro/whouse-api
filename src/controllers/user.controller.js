@@ -1,7 +1,7 @@
-const catchAsync = require("../utils/catchAsync"); // Error Handling wrapper for aysnc operations
-const AppError = require("../utils/app-error"); // Custom Error Handling Class
-const User = require("../models/user.model");
-const resHandler = require("./responseHandler");
+const catchAsync = require('../utils/catchAsync'); // Error Handling wrapper for aysnc operations
+const AppError = require('../utils/app-error'); // Custom Error Handling Class
+const User = require('../models/user.model');
+const resHandler = require('./responseHandler');
 
 const filterRequestBody = (inputData, ...allowedFields) => {
   const fields = {};
@@ -13,21 +13,26 @@ const filterRequestBody = (inputData, ...allowedFields) => {
 
 exports.getAllUsers = resHandler.getAll(User);
 
-exports.getUser = resHandler.getOne(User, "User");
+exports.getUser = resHandler.getOne(User, 'User');
 
 exports.me = (req, res, next) => {
   req.params.id = req.user.id;
   next();
 };
 
-exports.updateUser = resHandler.updateOne(User, "User");
+exports.updateUser = resHandler.updateOne(User, 'User');
 
-exports.deleteUser = resHandler.deleteOne(User, "User");
+exports.deleteUser = resHandler.deleteOne(User, 'User');
 
 exports.createUser = catchAsync(async (req, res, next) => {
-  next(
-    new AppError("This route is not defined! Please use the users/signup route")
-  );
+  const user = await User.create(req.body);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
@@ -35,13 +40,13 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm)
     return next(
       new AppError(
-        "Cannot update password from theis route. Use /updatePassword",
+        'Cannot update password from theis route. Use /updatePassword',
         400
       )
     );
 
   // filter unwanted data from the request object
-  const filteredData = filterRequestBody(req.body, "firstname", "lastname");
+  const filteredData = filterRequestBody(req.body, 'firstname', 'lastname');
 
   // Update User document
   const user = await User.findByIdAndUpdate(
@@ -51,7 +56,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
       user,
     },
@@ -61,7 +66,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
   res.status(204).json({
-    status: "success",
+    status: 'success',
     data: null,
   });
 });
