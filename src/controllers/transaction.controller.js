@@ -1,15 +1,15 @@
 import Transactions from '../models/transaction.model';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/app-error';
+import Features from '../utils/features';
 
 export const getAllTransactions = catchAsync(async (req, res) => {
-  let user = {};
-
-  if (req.user) user = { userid: req.user.id };
-
-  console.log(user);
-
-  const transactions = await Transactions.find(user);
+  const features = new Features(Transactions.find(), req.query)
+    .filter()
+    .sort()
+    .project()
+    .paginate();
+  const transactions = await features.query;
 
   res.status(200).json({
     status: 'success',
