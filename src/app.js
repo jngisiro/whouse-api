@@ -12,6 +12,7 @@ import transactionRouter from './routes/transaction.routes';
 import payloadRouter from './routes/payload.routes';
 import AppError from './utils/app-error';
 import globalErrorHandler from './controllers/error.controller';
+import { sendemail } from './utils/sendemail';
 
 const app = express();
 
@@ -49,11 +50,14 @@ app.use(hpp({ whitelist: ['duration'] }));
 // Serve static files in public folder
 app.use(express.static('public'));
 
+// send emails from the contact form
+app.post('/api/v1/sendemail', sendemail);
+
 // User routes
 app.use('/api/v1/users', userRouter);
 
 // Payload Routes
-app.use('/api/v1/payload', payloadRouter);
+app.use('/api/v1/email', payloadRouter);
 
 // Transaction routes
 app.use('/api/v1/transactions', transactionRouter);
