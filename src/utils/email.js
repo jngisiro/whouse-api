@@ -4,7 +4,7 @@ const htmlToText = require('html-to-text');
 
 module.exports = class Email {
   constructor(name, email, message) {
-    this.to = 'jngisiro@gmail.com';
+    this.to = 'hanibk2@gmail.com';
     this.message = message;
     this.name = name;
     this.from = `Track SOL <${email}>`;
