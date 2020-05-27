@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 const transactionSchema = new mongoose.Schema(
   {
     deliveryDate: {
@@ -58,7 +60,14 @@ const transactionSchema = new mongoose.Schema(
 
     step: {
       type: String,
-      enum: ['draft', 'submitted', 'finance', 'accounts', 'manager', 'approved'],
+      enum: [
+        'draft',
+        'submitted',
+        'finance',
+        'accounts',
+        'manager',
+        'approved',
+      ],
       default: 'finance',
     },
   },
@@ -67,6 +76,8 @@ const transactionSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+transactionSchema.plugin(AutoIncrement, { inc_field: 'id' });
 
 transactionSchema.virtual('comments', {
   ref: 'Comment',

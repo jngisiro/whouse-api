@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 
 import app from './app';
 
+// const AutoIncrement = require('mongoose-sequence')(mongoose);
+
 // Saftety net handle unexpected programming errors
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION!');
@@ -17,8 +19,8 @@ else dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE;
 
-mongoose
-  .connect(DB, {
+export const connection = mongoose
+  .createConnection(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
