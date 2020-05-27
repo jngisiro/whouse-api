@@ -58,7 +58,7 @@ const transactionSchema = new mongoose.Schema(
 
     step: {
       type: String,
-      enum: ['draft', 'finance', 'finance', 'accounts', 'manager', 'approved'],
+      enum: ['draft', 'submitted', 'finance', 'accounts', 'manager', 'approved'],
       default: 'finance',
     },
   },
