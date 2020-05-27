@@ -25,7 +25,7 @@ const transactionSchema = new mongoose.Schema(
     },
 
     purchaseOrderNumber: {
-      type: Number,
+      type: String,
       required: [true, 'Please provide a purchase order number'],
     },
 
