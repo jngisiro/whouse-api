@@ -59,7 +59,7 @@ const transactionSchema = new mongoose.Schema(
     withholdingTax: {
       type: Number,
       required: [true, 'Withholding tax is requried']
-    }
+    },
 
     rejected: {
       type: Boolean,
