@@ -5,7 +5,6 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const transactionSchema = new mongoose.Schema(
   {
     deliveryDate: {
-      // TODO: is this automatic or entered
       type: Date,
       required: [true, 'The delivery date is required'],
     },
@@ -16,9 +15,8 @@ const transactionSchema = new mongoose.Schema(
     },
 
     payload: {
-      // TODO: List of items or number
-      type: [String],
-      required: [true, 'Please list the delivered items'],
+      type: String,
+      required: [true, 'Please provide description of goods or services'],
     },
 
     paymentVoucherNumber: {
@@ -52,6 +50,16 @@ const transactionSchema = new mongoose.Schema(
       // TODO: How this is calculated
       type: Number,
     },
+
+    invoiceAmount: {
+      type: Number,
+      required: [true, 'Please provide invoice amount']
+    },
+
+    withholdingTax: {
+      type: Number,
+      required: [true, 'Withholding tax is requried']
+    }
 
     rejected: {
       type: Boolean,

@@ -18,6 +18,11 @@ const commentSchema = mongoose.Schema(
       ref: 'Transaction',
       required: [true, 'Comment must have a transaction'],
     },
+
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    }
   },
   {
     toJSON: { virtuals: true },
