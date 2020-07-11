@@ -19,6 +19,11 @@ const transactionSchema = new mongoose.Schema(
       required: [true, 'Please provide description of goods or services'],
     },
 
+    location: {
+      type: String,
+      required: [true, 'Location is required'],
+    },
+
     paymentVoucherNumber: {
       type: Number,
       required: [true, 'Please provide a payment voucher number'],
@@ -53,12 +58,12 @@ const transactionSchema = new mongoose.Schema(
 
     invoiceAmount: {
       type: Number,
-      required: [true, 'Please provide invoice amount']
+      required: [true, 'Please provide invoice amount'],
     },
 
     withholdingTax: {
       type: Number,
-      required: [true, 'Withholding tax is requried']
+      required: [true, 'Withholding tax is requried'],
     },
 
     rejected: {
