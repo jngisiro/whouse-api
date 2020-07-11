@@ -7,8 +7,8 @@ export const getAllTransactions = catchAsync(async (req, res) => {
   const features = new Features(Transactions.find(), req.query)
     .filter()
     .sort()
-    .project()
-    .paginate();
+    .project();
+
   const transactions = await features.query;
 
   res.status(200).json({
