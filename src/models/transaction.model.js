@@ -9,6 +9,16 @@ const transactionSchema = new mongoose.Schema(
       required: [true, 'The delivery date is required'],
     },
 
+   supplierName: {
+      type: String,
+      required: [true, 'Supplier name is required'],
+    },
+
+    submittedBy: {
+      type: String,
+      required: [true, 'Supply Chain User is required'],
+    },
+
     userid: {
       type: mongoose.Schema.ObjectId,
       required: [true, 'The user is required'],
