@@ -81,6 +81,12 @@ const transactionSchema = new mongoose.Schema(
       default: false,
     },
 
+    status: {
+      type: String,
+      enum: ['open', 'closed', 'rejected'],
+      default: 'open'
+    },
+
     step: {
       type: String,
       enum: [
