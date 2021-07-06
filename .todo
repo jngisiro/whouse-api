@@ -1,46 +1,23 @@
-hotel model 
-region [central - eastern - western - south west - north east - northern - north west]
-  - Cities
-    - Hotels
+transaction
+  - trackingNumber(_id)
+  - delivery date
+  - userid
+  - payload id
+  - purchase order number
+  - payment voucher number
+  - project code
+  - Activity line
+  - payment requisition date
+  - comments[Array]
+  - step
+  - items[array]
+  - description of items
 
+user
+  - name
+  - password
+  - role
 
-Hotel
-  -name
-  -location
-  -address
-  -region
-  -images
-  -coverimage
-  -description
-  -summary
-  -facilities
-  -languages
-  -availability
-  -prices
-  -avgPrice
-  -rating
-    -facilities
-    -scenary
-    -staff
-    -food
-  -reviews
-  -rules
-  -views
-
-
-USER
- - Bookings (few) booking id
- - Favourites (many)
- - Reviews (many)
-
-LOCATION
-  - HOTEL (many)
-    - REVIEW (many)
-
-BOOKING 
- - start date
- - end date
- - user id
- - hotel id
- - payment type
-
+comments
+  - userid
+  - trasaction id

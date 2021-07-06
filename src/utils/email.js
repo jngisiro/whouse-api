@@ -1,20 +1,20 @@
-const nodemailer = require("nodemailer");
-const pug = require("pug");
-const htmlToText = require("html-to-text");
+const nodemailer = require('nodemailer');
+const pug = require('pug');
+const htmlToText = require('html-to-text');
 
 module.exports = class Email {
-  constructor(user, url) {
-    this.to = user.email;
-    this.firstName = user.firstname;
-    this.url = url;
-    this.from = `Support at Hotels.ug <${process.env.EMAIL_FROM}>`;
+  constructor(name, email, message) {
+    this.to = 'hanibk2@gmail.com';
+    this.message = message;
+    this.name = name;
+    this.from = `Track SOL <${email}>`;
   }
 
   newTransport() {
     // Create transporter
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       return nodemailer.createTransport({
-        service: "SendGrid",
+        service: 'SendGrid',
         auth: {
           user: process.env.SENDGRID_USERNAME,
           pass: process.env.SENDGRID_PASS,
@@ -35,9 +35,10 @@ module.exports = class Email {
   async send(template, subject) {
     // Render HTML for the email
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
-      firstName: this.firstName,
-      url: this.url,
-      subject,
+      name: this.name,
+      subject: 'Track Sol',
+      message: this.message,
+      email: this.from,
     });
 
     // Define email options
@@ -55,13 +56,17 @@ module.exports = class Email {
   }
 
   async sendWelcome() {
-    await this.send("welcome", "Welcome to Hotels.ug 😁");
+    await this.send('welcome', 'Welcome to Hotels.ug 😁');
+  }
+
+  async sendMessage() {
+    await this.send('message', '🧐 Message from Track Sol Contact Form');
   }
 
   async sendPasswordReset() {
     await this.send(
-      "passwordReset",
-      "Your password reset token (Valid for only 10 minutes)"
+      'passwordReset',
+      'Your password reset token (Valid for only 10 minutes)'
     );
   }
 };

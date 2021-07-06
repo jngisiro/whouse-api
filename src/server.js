@@ -7,7 +7,7 @@ import app from './app';
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION!');
   console.log(err.name, err.stack);
-  // process.exit(1);
+  process.exit(1);
 });
 
 if (process.env.NODE_ENV === 'test')
@@ -38,9 +38,9 @@ const server = app.listen(PORT, () => {
 process.on('unhandledRejection', (err) => {
   console.log('UNHANDLED REJECTION!');
   console.log(err.name, err.message);
-  // server.close(() => {
-  //   process.exit(1);
-  // });
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
 module.exports = server;

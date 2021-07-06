@@ -1,66 +1,47 @@
-const mongoose = require("mongoose");
-const validator = require("validator");
-const bcrypt = require("bcryptjs");
-const crypto = require("crypto");
+const mongoose = require('mongoose');
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 const userSchema = new mongoose.Schema({
-  firstname: { type: String, required: [true, "Please provide a first name"] },
-  lastname: { type: String, required: [true, "Please provide a last name"] },
+  firstname: { type: String, required: [true, 'Please provide a first name'] },
+  lastname: { type: String, required: [true, 'Please provide a last name'] },
   email: {
     type: String,
-    required: [true, "Please provide an email address"],
+    required: [true, 'Please provide an email address'],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, "Please provide a valid email"],
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
   role: {
     type: String,
-    enum: ["user", "admin", "superadmin"],
-    default: "user",
+    enum: ['user', 'manager', 'accounts', 'finance', 'admin'],
+    default: 'user',
   },
   password: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, 'Please provide a password'],
     minlength: 8,
     select: false, // Password field won't be selected in a user query
   },
   passwordConfirm: {
     type: String,
-    required: [true, "Please provide a password"],
+    required: [true, 'Please provide a password'],
     validate: {
       // Custom validator only runs on Create() & Save()
       validator: function (el) {
         return el === this.password;
       },
-      msg: "Passwords do not match",
+      msg: 'Passwords do not match',
     },
   },
-  bookings: [{ type: mongoose.Schema.ObjectId, ref: "Hotel" }],
-  favourites: [{ type: mongoose.Schema.ObjectId, ref: "Hotel" }],
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
-  accountActivated: {
-    type: Boolean,
-    default: false,
-  },
-  passwordChangedAt: {
-    type: Date,
-    select: false,
-  }, // Created only when a user changes password
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-  confirmAccountToken: String,
-  confirmAccountExpires: Date,
 });
 
 // This function runs everytime a new document is created or saved in the database
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
   // check if the password field has been modified before running the hash or exiting if not
-  if (!this.isModified("password")) return next();
+  if (!this.isModified('password')) return next();
 
   // Password hashed
   this.password = await bcrypt.hash(this.password, 12);
@@ -72,8 +53,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.pre("save", function (next) {
-  if (!this.isModified("password") || this.isNew) return next();
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
@@ -83,35 +64,6 @@ userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
-
-// userSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path: "transactions",
-//     select: "-__v"
-//   });
-//   next();
-// });
-
-// Embed transaction documents into the User document
-// userSchema.pre("save", async function() {
-//   const transactionPromises = this.transactions.map(
-//     async id => await Transaction.findById(id)
-//   );
-//   this.transactions = await Promise.all(transactionPromises);
-// });
-
-// userSchema.pre(/^find/, async function(next) {
-//   const transactions = await Transaction.find();
-//   console.log(transactions);
-//   this.transactions = transactions;
-//   next();
-// });
-
-// userSchema.virtual("transactions", {
-//   ref: "Transaction",
-//   foreignField: "sender/_id",
-//   localField: "_id"
-// });
 
 // Instance method for all user documents
 userSchema.methods.correctPassword = async function (
@@ -138,23 +90,23 @@ userSchema.methods.changedPasswordAfterToken = function (JWT_timeStamp) {
 };
 
 userSchema.methods.createToken = function (operation) {
-  const token = crypto.randomBytes(32).toString("hex");
+  const token = crypto.randomBytes(32).toString('hex');
 
-  if (operation === "confirmAccount") {
+  if (operation === 'confirmAccount') {
     this.confirmAccountToken = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(token)
-      .digest("hex");
+      .digest('hex');
     this.confirmAccountExpires = Date.now() + 60 * 60 * 1000;
   } else {
     this.passwordResetToken = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(token)
-      .digest("hex");
+      .digest('hex');
     this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   }
 
   return token;
 };
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

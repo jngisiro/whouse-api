@@ -1,26 +1,34 @@
 import express from 'express';
 
 import {
-  createBooking,
-  getAllBookings,
-  getBooking,
-  updateBooking,
-  deleteBooking,
+  createTransaction,
+  getAllTransactions,
+  getTransaction,
+  updateTransaction,
+  deleteTransaction,
 } from '../controllers/transaction.controller';
 
 import { protect, restrictTo } from '../controllers/auth.controller';
 
+import commentRouter from './comment.routes';
+
 const router = express.Router({ mergeParams: true });
 
-router
-  .route('/bookings')
-  .post(getAllBookings, restrictTo('user', 'admin'), getAllBookings)
-  .post(protect, restrictTo('user'), createBooking);
+router.use('/:id/comments', commentRouter);
 
 router
-  .route('/:booking-id')
-  .post(protect, restrictTo('admin'), getBooking)
-  .patch(protect, restrictTo('admin'), updateBooking)
-  .delete(protect, restrictTo('admin'), deleteBooking);
+  .route('/')
+  .get(
+    protect,
+    restrictTo('user', 'manager', 'accounts', 'finance', 'admin'),
+    getAllTransactions
+  )
+  .post(protect, restrictTo('user'), createTransaction);
+
+router
+  .route('/:id')
+  .get(protect, getTransaction)
+  .patch(protect, updateTransaction)
+  .delete(protect, restrictTo('admin'), deleteTransaction);
 
 export default router;
